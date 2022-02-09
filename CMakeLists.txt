@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.22.2)
+project(LearnOpenGL)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -ggdb -std=c++11 -lGL -lX11 -lpthread -lXrandr -lXi -ldl")
+add_subdirectory(libs)
+add_subdirectory(tutorials)

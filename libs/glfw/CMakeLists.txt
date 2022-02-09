@@ -1,0 +1,5 @@
+add_library(lib_glfw INTERFACE)
+find_package(glfw3 3.3 REQUIRED)
+target_link_libraries(lib_glfw INTERFACE glfw)
+find_package(OpenGL REQUIRED)
+target_link_libraries(lib_glfw INTERFACE OpenGL::GL)
