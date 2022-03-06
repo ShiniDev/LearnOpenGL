@@ -35,49 +35,55 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // Vertex Input
-    std::vector<float> vertices{
-        -0.5f, 0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f
+    std::vector<float> triangle_1{
+        -1.0f, 0.0f, 0.0f,
+        -0.5f, 0.8f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        //
+    };
+    std::vector<float> triangle_2{
+        0.0f, 0.0f, 0.0f,
+        0.5f, 0.8f, 0.0f,
+        1.0f, 0.0f, 0.0f,
         //
     };
 
-    std::vector<unsigned int> indices{
-        0, 1, 3,
-        1, 2, 3
-        //
-    };
-
-    GLuint VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    GLuint VBO[2], VAO[2];
+    glGenVertexArrays(2, VAO);
+    glGenBuffers(2, VBO);
+    glBindVertexArray(VAO[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
     // Copy vertices data to buffer's memory
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-    // Copy indeces data to buffer
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * triangle_1.size(), &triangle_1[0], GL_STATIC_DRAW);
     // Interpret the vertex data
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    glBindVertexArray(VAO[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    // Copy vertices data to buffer's memory
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * triangle_2.size(), &triangle_2[0], GL_STATIC_DRAW);
+    // Interpret the vertex data
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // Shader Configuration
     std::string vertex_shader_source = my_utils::read_f(my_utils::get_exec_dir() + "triangle_vs.glsl");
     std::string fragment_shader_source = my_utils::read_f(my_utils::get_exec_dir() + "triangle_fs.glsl");
+    std::string fragment_shader_source_1 = my_utils::read_f(my_utils::get_exec_dir() + "triangle_fs_1.glsl");
     Shader vertex_shader(vertex_shader_source, GL_VERTEX_SHADER);
     Shader fragment_shader(fragment_shader_source, GL_FRAGMENT_SHADER);
-    // To create an initializer list
-    ShaderProgram program{{vertex_shader.getShader(), fragment_shader.getShader()}};
+    Shader fragment_shader_1{fragment_shader_source_1, GL_FRAGMENT_SHADER};
+    ShaderProgram program_1{{vertex_shader.getShader(), fragment_shader.getShader()}};
+    ShaderProgram program_2{{vertex_shader.getShader(), fragment_shader_1.getShader()}};
 
     vertex_shader.deleteShader();
     fragment_shader.deleteShader();
+    fragment_shader_1.deleteShader();
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
@@ -85,11 +91,12 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        program.useProgram();
-        glBindVertexArray(VAO);
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        program_1.useProgram();
+        glBindVertexArray(VAO[0]);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        program_2.useProgram();
+        glBindVertexArray(VAO[1]);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

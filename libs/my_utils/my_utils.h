@@ -7,6 +7,9 @@
 #include <sstream>
 #include <fstream>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 namespace my_utils {
 
     inline std::string get_exec_path();
@@ -15,6 +18,9 @@ namespace my_utils {
     inline std::string read_f(std::string);
     template <typename T>
     inline void print_vec(const std::vector<T> &);
+
+    inline void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+    inline void process_input(GLFWwindow *window);
 
     inline std::string get_exec_path()
     {
@@ -69,6 +75,18 @@ namespace my_utils {
         std::stringstream ss;
         ss << f.rdbuf();
         return ss.str();
+    }
+
+    inline void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+    {
+        glViewport(0, 0, width, height);
+    }
+
+    inline void process_input(GLFWwindow *window)
+    {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            glfwSetWindowShouldClose(window, true);
+        }
     }
 
 } // namespace my_utils

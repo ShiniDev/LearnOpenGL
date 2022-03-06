@@ -9,9 +9,6 @@ ShaderProgram::ShaderProgram(std::initializer_list<GLuint> t)
     }
     glLinkProgram(program);
     linkCheckErrors();
-    for (const auto &x : t) {
-        glDeleteShader(x);
-    }
 }
 
 void ShaderProgram::linkCheckErrors()

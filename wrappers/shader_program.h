@@ -13,6 +13,8 @@ public:
 
     const GLuint &getProgram() const { return program; }
     GLuint &getProgram() { return program; }
+    void useProgram() { glUseProgram(program); }
+    void deleteProgram() { glDeleteProgram(program); }
 
 private:
     GLuint program;

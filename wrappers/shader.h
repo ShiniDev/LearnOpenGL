@@ -13,6 +13,7 @@ public:
 
     GLuint &getShader() { return shader; }
     const GLuint &getShader() const { return shader; }
+    void deleteShader() { glDeleteShader(shader); }
 
 private:
     GLuint shader;

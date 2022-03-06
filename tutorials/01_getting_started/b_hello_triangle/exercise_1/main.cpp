@@ -36,37 +36,27 @@ int main()
 
     // Vertex Input
     std::vector<float> vertices{
-        -0.5f, 0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f
+        -1.0f, 0.0f, 0.0f,
+        -0.5f, 0.8f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.5f, 0.8f, 0.0f,
+        1.0f, 0.0f, 0.0f,
         //
     };
 
-    std::vector<unsigned int> indices{
-        0, 1, 3,
-        1, 2, 3
-        //
-    };
-
-    GLuint VBO, VAO, EBO;
+    GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     // Copy vertices data to buffer's memory
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-    // Copy indeces data to buffer
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
     // Interpret the vertex data
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // Shader Configuration
     std::string vertex_shader_source = my_utils::read_f(my_utils::get_exec_dir() + "triangle_vs.glsl");
@@ -87,9 +77,7 @@ int main()
 
         program.useProgram();
         glBindVertexArray(VAO);
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
