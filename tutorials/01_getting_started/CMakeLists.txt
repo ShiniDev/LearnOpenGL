@@ -1,2 +1,3 @@
 add_subdirectory(a_hello_window)
 add_subdirectory(b_hello_triangle)
+add_subdirectory(c_shaders)

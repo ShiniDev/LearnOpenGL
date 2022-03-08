@@ -25,11 +25,12 @@ Shader::Shader(const std::string &source, GLenum shader_type)
 
 void Shader::compileCheckErrors()
 {
-    int success;
-    char info_log[1024];
+    int success, length;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(shader, 1024, nullptr, info_log);
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+        char info_log[length];
+        glGetShaderInfoLog(shader, length, nullptr, info_log);
         std::cout << "ERROR::SHADER::COMPILATION_FAILED" << std::endl
                   << info_log << std::endl;
     }

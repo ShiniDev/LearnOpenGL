@@ -13,11 +13,12 @@ ShaderProgram::ShaderProgram(std::initializer_list<GLuint> t)
 
 void ShaderProgram::linkCheckErrors()
 {
-    int success;
-    char info_log[1024];
-    glGetProgramiv(program, GL_COMPILE_STATUS, &success);
+    int success, length;
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (!success) {
-        glGetProgramInfoLog(program, 1024, nullptr, info_log);
+        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
+        char info_log[length];
+        glGetProgramInfoLog(program, length, nullptr, info_log);
         std::cout << "ERROR::SHADER::LINKING_FAILED" << std::endl
                   << info_log << std::endl;
     }

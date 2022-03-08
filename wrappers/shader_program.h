@@ -15,6 +15,7 @@ public:
     GLuint &getProgram() { return program; }
     void useProgram() { glUseProgram(program); }
     void deleteProgram() { glDeleteProgram(program); }
+    int uniformLoc(const char *uniform_name) { return glGetUniformLocation(program, uniform_name); }
 
 private:
     GLuint program;
